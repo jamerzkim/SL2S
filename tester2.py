@@ -16,7 +16,7 @@ hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 # Load your trained model
 model_dict = pickle.load(open('./model.p', 'rb'))
 model = model_dict['model']
-labels_dict = {0: 'Hi!', 1: 'How', 2: 'are you', 3: 'today?', 4: 'i love you', 5: 'Thank You', 6: 'Quiet'}
+labels_dict = {0: 'Hi!', 1: 'How', 2: 'are you', 3: 'today?', 4: 'i love you', 5: 'Quiet'}
 
 # Create a UDP socket
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -55,12 +55,12 @@ while cap.isOpened():
                 data_aux.append(landmark.x)
                 data_aux.append(landmark.y)
             # Prepare the data for prediction
-            # max_length = 84
-            # padded_data_aux = np.pad(data_aux, (0, max_length - len(data_aux)), mode='constant')
-            # padded_data_aux = padded_data_aux.reshape(1, -1)
-            # Make prediction
-            # prediction = model.predict(padded_data_aux)
-            prediction = model.predict([np.asarray(data_aux)])
+            required_feature_size = model.n_features_in_
+
+        # Pad the data with zeros based on the required feature size
+            padded_data_aux = np.pad(data_aux, (0, required_feature_size - len(data_aux)), mode='constant')
+            padded_data_aux = padded_data_aux.reshape(1, -1)
+            prediction = model.predict(padded_data_aux)
             predicted_char = labels_dict[int(prediction[0])]
             # Display the predicted label (you can customize how to display it)
             cv2.putText(img, predicted_char, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
