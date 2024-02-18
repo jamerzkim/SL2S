@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language to Speech</title>
+    <style>
+        #video-container {
+            position: relative;
+            width: 640px;
+            height: 480px;
+        }
+        #video {
+            width: 100%;
+            height: 100%;
+        }
+        #output {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="video" autoplay playsinline></video>
+        <div id="output"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
+    <script>
+        async function main() {
+            const video = document.getElementById('video');
+            const output = document.getElementById('output');
+            
+            // Load the handpose model
+            const handpose = await handpose.load();
+            console.log('Handpose model loaded');
+
+            // Access the webcam stream
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+
+            // Detect hand gestures
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            video.addEventListener('loadeddata', async () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                setInterval(async () => {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const predictions = await handpose.estimateHands(canvas);
+                    if (predictions.length > 0) {
+                        const landmarks = predictions[0].landmarks;
+                        // Process hand landmarks and recognize sign language
+                        const text = await recognizeSignLanguage(landmarks);
+                        output.innerText = text;
+                    }
+                }, 100);
+            });
+        }
+
+        async function recognizeSignLanguage(landmarks) {
+            // Process hand landmarks and recognize sign language using your model
+            // Implement your sign language to speech model logic here
+            // For demonstration purposes, returning a random result
+            const labels = ['Hello', 'Thank you', 'Goodbye', 'Yes', 'No'];
+            const randomIndex = Math.floor(Math.random() * labels.length);
+            return labels[randomIndex];
+        }
+
+        main();
+    </script>
+</body>
+</html>

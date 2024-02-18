@@ -12,7 +12,7 @@ else:
         for dir in dirs:
             os.rmdir(os.path.join(root, dir))
 
-number_of_classes = 2
+number_of_classes = 5
 dataset_size = 150
 
 cap = cv2.VideoCapture(0)
