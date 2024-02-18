@@ -25,7 +25,7 @@ for j in range(number_of_classes):
     if not os.path.exists(class_dir):
         os.makedirs(class_dir)
 
-    print('Collecting data for class {}'.format(j))
+    print('Collecting data for class {}'.format(j)) 
 
     done = False
     while True:

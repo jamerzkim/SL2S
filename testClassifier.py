@@ -24,7 +24,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-labels_dict = {0: 'Hey!', 1: 'Shhhh!', 2: 'Rock'}
+labels_dict = {0: 'Heyyyyy!', 1: 'First Ammendment', 2: 'Zero Losses Allowed'}
 
 prev_prediction = None
 predicted_words = []
